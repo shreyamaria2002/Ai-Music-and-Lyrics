@@ -26,7 +26,7 @@ def preprocess_midi(file_path):
 def prepare_sequences(notes, sequence_length=100):
     unique_notes = sorted(set(notes))
     note_to_int = {note: i for i, note in enumerate(unique_notes)}
-
+    int_to_note = {i: note for i, note in enumerate(unique_notes)}
     network_input = []
     network_output = []
 
@@ -45,7 +45,7 @@ def prepare_sequences(notes, sequence_length=100):
     else:
         print("Warning: network_output is empty. Model training might fail.")
 
-    return network_input, network_output, len(unique_notes)
+    return network_input, network_output, len(unique_notes),note_to_int,int_to_note
 
 # Directory containing MIDI files
 midi_directory = r"C:\Users\user\Desktop\Rohith_Ai Music\midi file\maestro-v3.0.0\2004"
@@ -60,7 +60,7 @@ for file in glob.glob(os.path.join(midi_directory, "*.mid")):
 sequence_length = 100  # Define the length of input sequences
 
 if len(notes_corpus) > 0:  # Check if notes_corpus is not empty
-    X, y, num_unique_notes = prepare_sequences(notes_corpus, sequence_length)
+    X, y, num_unique_notes,note_to_int,int_to_note = prepare_sequences(notes_corpus, sequence_length)
 
     if num_unique_notes > 0:  # Check if unique_notes is not empty
         # Define the model architecture
